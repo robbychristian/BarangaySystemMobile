@@ -1,6 +1,6 @@
 import { Button, Text } from "@ui-kitten/components";
 import React, { useState } from "react";
-import { TouchableOpacity, View } from "react-native";
+import { Image, TouchableOpacity, View } from "react-native";
 import CustomPaperInput from "../components/CustomPaperInput";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
@@ -44,7 +44,11 @@ const Login = () => {
       }}
     >
       <Loading loading={loading} />
-      <View style={{ width: "80%" }}>
+      <View style={{ width: "80%", alignItems: "center" }}>
+        <Image
+          source={require("../../assets/barnagayugong.png")}
+          style={{ height: 250, width: 200 }}
+        />
         <CustomPaperInput
           label={`Email`}
           mode={"outlined"}

@@ -12,6 +12,10 @@ import BlotterReports from "../screens/Services/BlotterReports";
 import Reservations from "../screens/Services/Reservations";
 import Transaction from "../screens/Services/Transaction";
 import Records from "../screens/Records/Records";
+import Clinic from "../screens/Services/Clinic";
+import BarangayRecords from "../screens/Records/BarangayRecords";
+import IncidentReports from "../screens/Records/IncidentReports";
+import TransactionRecords from "../screens/Records/TransactionRecords";
 
 const DrawerStack = createDrawerNavigator();
 
@@ -95,10 +99,42 @@ const DrawerNavigation = () => {
         }}
       />
       <DrawerStack.Screen
+        name="Clinic"
+        component={Clinic}
+        options={{
+          headerTitle: "CLINIC",
+          headerTitleAlign: "center",
+        }}
+      />
+      <DrawerStack.Screen
         name="Transactions"
         component={Transaction}
         options={{
           headerTitle: "TRANSACTIONS",
+          headerTitleAlign: "center",
+        }}
+      />
+      <DrawerStack.Screen
+        name="BarangayRecords"
+        component={BarangayRecords}
+        options={{
+          headerTitle: "BRGY. RECORDS",
+          headerTitleAlign: "center",
+        }}
+      />
+      <DrawerStack.Screen
+        name="IncidentReports"
+        component={IncidentReports}
+        options={{
+          headerTitle: "INCIDENT REPORTS",
+          headerTitleAlign: "center",
+        }}
+      />
+      <DrawerStack.Screen
+        name="TransactionRecords"
+        component={TransactionRecords}
+        options={{
+          headerTitle: "TRANSACTION REC.",
           headerTitleAlign: "center",
         }}
       />

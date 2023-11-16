@@ -33,12 +33,7 @@ export const registerUser = createAsyncThunk(
   async (inputs, { rejectWithValue }) => {
     const { name, email, password, confirmPassword } = inputs;
     try {
-      const response = await api.post("register", {
-        name,
-        email,
-        password,
-        password_confirmation: confirmPassword,
-      });
+      const response = await api.post("register", inputs);
 
       return response.data;
     } catch (err) {

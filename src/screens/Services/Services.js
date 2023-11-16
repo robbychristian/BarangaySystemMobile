@@ -46,7 +46,7 @@ const Services = () => {
           <CustomClickableCard
             icon={"calendar-month"}
             onPress={() => {
-              console.log("test");
+              navigation.navigate("Clinic");
             }}
             text={`CLINIC`}
           />
@@ -57,13 +57,14 @@ const Services = () => {
             }}
             text={`TRANSACTION`}
           />
-          <CustomClickableCard
+          {/* <CustomClickableCard
             icon={"calendar-today"}
             onPress={() => {
               console.log("test");
             }}
             text={`APPOINTMENT`}
-          />
+          /> */}
+          <CustomClickableCard hidden={true} />
         </View>
       </ScrollView>
     </View>

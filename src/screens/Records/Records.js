@@ -19,28 +19,28 @@ const Records = () => {
           <CustomClickableCard
             icon={"bank"}
             onPress={() => {
-              console.log("test");
+              navigation.navigate("BarangayRecords");
             }}
             text={`BARANGAY RECORDS`}
           />
-          <CustomClickableCard
+          {/* <CustomClickableCard
             icon={"home"}
             onPress={() => {
               console.log("test");
             }}
             text={`RESIDENT RECORDS`}
-          />
+          /> */}
           <CustomClickableCard
             icon={"text-box"}
             onPress={() => {
-              console.log("test");
+              navigation.navigate("IncidentReports");
             }}
             text={`INCIDENT REPORTS`}
           />
           <CustomClickableCard
             icon={"email-open"}
             onPress={() => {
-              console.log("test");
+              navigation.navigate("TransactionRecords");
             }}
             text={`TRANSACTION RECORDS`}
           />
