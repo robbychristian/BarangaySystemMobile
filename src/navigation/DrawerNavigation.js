@@ -16,6 +16,8 @@ import Clinic from "../screens/Services/Clinic";
 import BarangayRecords from "../screens/Records/BarangayRecords";
 import IncidentReports from "../screens/Records/IncidentReports";
 import TransactionRecords from "../screens/Records/TransactionRecords";
+import Tanod from "../screens/Tanod/Tanod";
+import { logout } from "../store/auth/User";
 
 const DrawerStack = createDrawerNavigator();
 
@@ -26,6 +28,9 @@ const DrawerContent = ({ navigation, state }) => {
       selectedIndex={new IndexPath(state.index)}
       onSelect={(index) => {
         navigation.navigate(state.routeNames[index.row]);
+        if (index != 6) {
+          navigation.navigate(state.routeNames[index.row]);
+        }
       }}
       style={{ marginTop: 50 }}
     >
@@ -33,6 +38,14 @@ const DrawerContent = ({ navigation, state }) => {
       <DrawerItem title={`Services`} />
       <DrawerItem title={`Announcements`} />
       <DrawerItem title={`Records`} />
+      <DrawerItem title={`Tanod`} />
+      <DrawerItem
+        title={`Logout`}
+        onPress={async () => {
+          navigation.navigate("Login");
+          await dispatch(logout());
+        }}
+      />
     </Drawer>
   );
 };
@@ -72,6 +85,14 @@ const DrawerNavigation = () => {
         name="Records"
         component={Records}
         options={{ headerTitle: "RECORDS", headerTitleAlign: "center" }}
+      />
+      <DrawerStack.Screen
+        name="Tanod"
+        component={Tanod}
+        options={{
+          headerTitle: "TANOD DEPLOYMENT",
+          headerTitleAlign: "center",
+        }}
       />
       {/* HIDDEN */}
       <DrawerStack.Screen

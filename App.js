@@ -10,8 +10,10 @@ import MainNavigation from "./src/navigation/MainNavigation";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { store } from "./src/store";
 import Container from "toastify-react-native";
+import { enableLatestRenderer } from "react-native-maps";
 
 export default function App() {
+  enableLatestRenderer();
   return (
     <>
       <SafeAreaProvider>
