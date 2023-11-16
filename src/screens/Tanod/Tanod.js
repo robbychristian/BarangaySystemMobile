@@ -39,7 +39,7 @@ const Tanod = () => {
                   longitude: Number(item.coordinates_lng),
                 }}
                 radius={100}
-                fillColor={ rgb(255,193,7, 0.5)}
+                fillColor={"rgba(255,193,7, 0.4)"}
               />
             );
           })}
