@@ -13,9 +13,11 @@ import moment from "moment";
 
 const DocumentSubmission = () => {
   const { user, token } = useSelector((state) => state.auth);
+  const [userProfile, setUserProfile] = useState({})
   const dispatch = useDispatch();
   const [date, setDate] = useState(new Date());
   const [age, setAge] = useState("");
+  const [documentCode, setDocumentCode] = useState("");
   const [gender, setGender] = useState("");
   const [civilStatus, setCivilStatus] = useState("");
   const [address, setAddress] = useState("");
@@ -25,9 +27,25 @@ const DocumentSubmission = () => {
   const [purposeOfDocument, setPurposeOfDocument] = useState("");
   const [file, setFile] = useState(null);
   useEffect(() => {
-    console.log(user);
-    console.log(token);
-  }, []);
+    api.get('services/getlatestdocument')
+        .then((response) => {
+            if (response.data == "") {
+                setDocumentCode('DS-001')
+            } else {
+                setDocumentCode("DS-00"+(Number(response.data)+1))
+            }
+        }).catch(err => {
+            console.log(err.response)
+        })
+
+    api.get(`getuseronlogin?user_id=${user.id}`)
+        .then((response) => {
+          setUserProfile(response.data)
+        })
+        .catch(err => {
+          console.log(err.response)
+        })
+}, [])
 
   const pickDocument = async () => {
     let result = await DocumentPicker.getDocumentAsync({});
@@ -103,6 +121,11 @@ const DocumentSubmission = () => {
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View>
           <Card>
+            <CustomPaperInput
+              label={`Document Code`}
+              mode={"outlined"}
+              value={documentCode}
+            />
             <Text category="h5" style={{ color: "#0284C7" }}>
               Personal Information
             </Text>
@@ -119,25 +142,25 @@ const DocumentSubmission = () => {
             <CustomPaperInput
               label={`Age`}
               mode={"outlined"}
-              value={age}
+              value={userProfile.age}
               onChangeText={(value) => setAge(value)}
             />
             <CustomPaperInput
               label={`Gender`}
               mode={"outlined"}
-              value={gender}
+              value={userProfile.gender}
               onChangeText={(value) => setGender(value)}
             />
             <CustomPaperInput
               label={`Civil Status`}
               mode={"outlined"}
-              value={civilStatus}
+              value={userProfile.civil_status}
               onChangeText={(value) => setCivilStatus(value)}
             />
             <CustomPaperInput
               label={`Address`}
               mode={"outlined"}
-              value={address}
+              value={userProfile.address}
               onChangeText={(value) => setAddress(value)}
             />
             <CustomPaperInput
@@ -148,7 +171,7 @@ const DocumentSubmission = () => {
             <CustomPaperInput
               label={`Phone Number`}
               mode={"outlined"}
-              value={phoneNumber}
+              value={userProfile.phone_number}
               onChangeText={(value) => setPhoneNumber(value)}
             />
           </Card>
@@ -174,12 +197,12 @@ const DocumentSubmission = () => {
             <Text category="h5" style={{ color: "#0284C7" }}>
               Additional Information
             </Text>
-            <CustomPaperInput
+            {/* <CustomPaperInput
               mode={`outlined`}
               label={`Nature of Business`}
               value={natureOfBusiness}
               onChangeText={(value) => setNatureOfBusiness(value)}
-            />
+            /> */}
             <CustomPaperInput
               mode={`outlined`}
               label={`Purpose of Document`}

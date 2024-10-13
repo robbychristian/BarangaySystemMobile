@@ -1,5 +1,5 @@
 import { Card, Text } from "@ui-kitten/components";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
 import CustomPaperInput from "../../components/CustomPaperInput";
 import CustomRNDatePicker from "../../components/Inputs/CustomRNDatePicker";
@@ -11,7 +11,9 @@ import { Toast } from "toastify-react-native";
 
 const BlotterReports = () => {
   const { user } = useSelector((state) => state.auth);
+  const [documentCode, setDocumentCode] = useState("");
   const [incidentType, setIncidentType] = useState("");
+  const [userProfile, setUserProfile] = useState({});
   //REPORTING PERSON
   const [dateAndTimeReport, setDateAndTimeReport] = useState(new Date());
   const [reportingAge, setReportingAge] = useState("");
@@ -25,6 +27,7 @@ const BlotterReports = () => {
   const [suspectRelationToVictim, setSuspectRelationToVictim] = useState("");
   const [suspectAge, setSuspectAge] = useState("");
   const [suspectGender, setSuspectGender] = useState("");
+  const [suspectDescription, setSuspectDescription] = useState("");
   const [suspectOccupation, setSuspectOccupation] = useState("");
   const [suspectAddress, setSuspectAddress] = useState("");
 
@@ -80,18 +83,39 @@ const BlotterReports = () => {
         console.log(err.response);
       });
   };
+
+  useEffect(() => {
+    api.get("services/getlatestblotterreport").then((response) => {
+        if (response.data == "") {
+            setDocumentCode("BR-001");
+        } else {
+            setDocumentCode("BR-00" + (Number(response.data) + 1));
+        }
+    });
+    api.get(`getuseronlogin?user_id=${user.id}`)
+        .then((response) => {
+          setUserProfile(response.data)
+        })
+        .catch(err => {
+          console.log(err.response)
+        })
+}, []);
   return (
     <View style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <View style={{ marginHorizontal: 10 }}>
+        <View style={{ marginHorizontal: 10  }}>
           <CustomPaperInput
-            isHalf
             label={`Incident Type`}
             mode="outlined"
             my={15}
             value={incidentType}
             onChangeText={(value) => setIncidentType(value)}
           />
+            <CustomPaperInput
+              label={`Document Code`}
+              mode={"outlined"}
+              value={documentCode}
+            />
         </View>
         <View>
           <Card disabled>
@@ -112,14 +136,14 @@ const BlotterReports = () => {
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
               <CustomPaperInput
-                value={reportingAge}
+                value={userProfile.age}
                 onChangeText={(value) => setReportingAge(value)}
                 label={`Age`}
                 mode={"outlined"}
                 isHalf
               />
               <CustomPaperInput
-                value={reportingGender}
+                value={userProfile.gender}
                 onChangeText={(value) => setReportingGender(value)}
                 label={`Gender`}
                 mode={"outlined"}
@@ -132,13 +156,13 @@ const BlotterReports = () => {
               setValue={setDateAndTimeIncident}
             />
             <CustomPaperInput
-              value={reportingAddress}
+              value={userProfile.address}
               onChangeText={(value) => setReportingAddress(value)}
               label={`Address`}
               mode={"outlined"}
             />
             <CustomPaperInput
-              value={reportingPhoneNumber}
+              value={userProfile.phone_number}
               onChangeText={(value) => setReportingPhoneNumber(value)}
               label={`Phone Number`}
               mode={"outlined"}
@@ -162,6 +186,12 @@ const BlotterReports = () => {
               label={`Relation To Victim`}
               mode={"outlined"}
             />
+            <CustomPaperInput
+              value={suspectDescription}
+              onChangeText={(value) => setSuspectDescription(value)}
+              label={`Suspect Description`}
+              mode={"outlined"}
+            />
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
@@ -180,12 +210,6 @@ const BlotterReports = () => {
                 isHalf
               />
             </View>
-            <CustomPaperInput
-              value={suspectOccupation}
-              onChangeText={(value) => setSuspectOccupation(value)}
-              label={`Occupation`}
-              mode={"outlined"}
-            />
             <CustomPaperInput
               value={suspectAddress}
               onChangeText={(value) => setSuspectAddress(value)}

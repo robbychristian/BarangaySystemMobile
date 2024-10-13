@@ -1,5 +1,5 @@
 import { Card, Radio, RadioGroup, Text } from "@ui-kitten/components";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
 import CustomPaperInput from "../../components/CustomPaperInput";
 import { useSelector } from "react-redux";
@@ -12,6 +12,9 @@ import { Toast } from "toastify-react-native";
 
 const Reservations = () => {
   const { user } = useSelector((state) => state.auth);
+  const [userProfile, setUserProfile] = useState("");
+  const [documentCode, setDocumentCode] = useState("");
+  const [quantity, setQuantity] = useState("");
   const [birthDate, setBirthDate] = useState(new Date());
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
@@ -73,11 +76,39 @@ const Reservations = () => {
     console.log(dateAndTime);
     console.log(purpose);
   };
+
+  useEffect(() => {
+    api
+      .get("services/getlatestreservation")
+      .then((response) => {
+        if (response.data == "") {
+          setDocumentCode("RF-001");
+        } else {
+          setDocumentCode("RF-00" + response.data);
+        }
+      })
+      .catch((err) => {
+        console.log(err.response);
+      })
+
+      api.get(`getuseronlogin?user_id=${user.id}`)
+        .then((response) => {
+          setUserProfile(response.data)
+        })
+        .catch(err => {
+          console.log(err.response)
+        })
+  }, []);
   return (
     <View style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View>
           <Card>
+            <CustomPaperInput
+              label={`Document Code`}
+              mode={`outlined`}
+              value={documentCode}
+            />
             <Text category="h5" style={{ color: "#0284C7" }}>
               Personal Information
             </Text>
@@ -95,14 +126,14 @@ const Reservations = () => {
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
               <CustomPaperInput
-                value={age}
+                value={userProfile.age}
                 onChangeText={(value) => setAge(value)}
                 label={`Age`}
                 mode={"outlined"}
                 isHalf
               />
               <CustomPaperInput
-                value={gender}
+                value={userProfile.gender}
                 onChangeText={(value) => setGender(value)}
                 label={`Gender`}
                 mode={"outlined"}
@@ -110,13 +141,13 @@ const Reservations = () => {
               />
             </View>
             <CustomPaperInput
-              value={civilStatus}
+              value={userProfile.civil_status}
               onChangeText={(value) => setCivilStatus(value)}
               label={`Civil Status`}
               mode={"outlined"}
             />
             <CustomPaperInput
-              value={address}
+              value={userProfile.address}
               onChangeText={(value) => setAddress(value)}
               label={`Address`}
               mode={"outlined"}
@@ -131,7 +162,7 @@ const Reservations = () => {
                 isHalf
               />
               <CustomPaperInput
-                value={phoneNumber}
+                value={userProfile.phone_number}
                 onChangeText={(value) => setPhoneNumber(value)}
                 label={`Phone Number`}
                 mode={"outlined"}
@@ -153,6 +184,12 @@ const Reservations = () => {
               <Radio>Barangay Vehicle</Radio>
               <Radio>Barangay Facilities</Radio>
             </RadioGroup>
+            <CustomPaperInput
+                value={quantity}
+                onChangeText={(value) => setQuantity(value)}
+                label={`Quantity`}
+                mode={"outlined"}
+              />
             <CustomPaperInput
               value={barangayEquipment}
               onChangeText={(value) => setBarangayEquipment(value)}
